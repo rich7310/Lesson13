@@ -1,4 +1,7 @@
 
+import javax.swing.JOptionPane;
+
+
 public class TaskManager extends javax.swing.JFrame {
 
     ArrayList list;
@@ -58,6 +61,11 @@ public class TaskManager extends javax.swing.JFrame {
         btnnext.setText(">");
 
         btnlast.setText(">|");
+        btnlast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnlastActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -245,9 +253,31 @@ public class TaskManager extends javax.swing.JFrame {
         Task t = new Task(nm, d);
         if(t.validate()==false)
         {
-            JOptionPane.show
+            JOptionPane.showMessageDialog(this,"Error - Must Enter All Information");
+            return;
         }
+        if(tottask > 0) li.next();
+        
+        li.add(t);
+        li.previos();
+        curtask++;
+        tottask++;
+        lblTT.setText(""+tottask);
+        lblCT.setText(""+curtask);
+        JOptionPane.showMessageDialog(this,"Task Added");
+        
     }//GEN-LAST:event_menuafterActionPerformed
+
+    private void btnlastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlastActionPerformed
+        if(curtask==tottask) return;
+        while(li.hasNext())
+            li.next();
+        t = (Task)li.previous();
+        curtask = tottask;
+        lblCT.setText(""+curtask);
+        txtname.setText(t.getName());
+        txtdesc.setText(t.getDescription());
+    }//GEN-LAST:event_btnlastActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
