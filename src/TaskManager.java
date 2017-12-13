@@ -59,6 +59,11 @@ public class TaskManager extends javax.swing.JFrame {
         btnprev.setText("<");
 
         btnnext.setText(">");
+        btnnext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnnextActionPerformed(evt);
+            }
+        });
 
         btnlast.setText(">|");
         btnlast.addActionListener(new java.awt.event.ActionListener() {
@@ -161,6 +166,11 @@ public class TaskManager extends javax.swing.JFrame {
         jMenu2.setText("Edit");
 
         menureplace.setText("Replace This As Current Task");
+        menureplace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menureplaceActionPerformed(evt);
+            }
+        });
         jMenu2.add(menureplace);
 
         menuremove.setText("Remove Current Task");
@@ -278,6 +288,34 @@ public class TaskManager extends javax.swing.JFrame {
         txtname.setText(t.getName());
         txtdesc.setText(t.getDescription());
     }//GEN-LAST:event_btnlastActionPerformed
+
+    private void btnnextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnextActionPerformed
+        if(curtask==tottask) return;
+        curtask++;
+        lblCT.setText(""+curtask);
+        li.next();
+        li.next();
+        t = (Task)li.previous();
+        txtname.setText(t.getName());
+        txtdesc.setText(t.getDescription());
+    }//GEN-LAST:event_btnnextActionPerformed
+
+    private void menureplaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menureplaceActionPerformed
+        if(tottask==0){
+            JOptionPane.showMessageDialog(this,"No task to Replace this with, use Insert Instead");
+            return;
+        }
+        String nm = txtname.getText();
+        String d = txtdesc.getText();
+        Task t = new Task(nm, d);
+        if(t.validate()==false){
+            JOptionPane.showMessageDialog(this,"Error - Must Enter All Information");
+            return;
+        }
+        li.next();
+        li.set(t);
+        li.previous();
+    }//GEN-LAST:event_menureplaceActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
