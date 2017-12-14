@@ -250,11 +250,41 @@ public class TaskManager extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuremoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuremoveActionPerformed
-        // TODO add your handling code here:
+        if(tottask==0)return;
+        li.next();
+        li.remove();
+        tottask--;
+        lbltottask.setText(""+tottask);
+        if(tottask==0)
+        {
+            txtname.setText("");
+            txtdesc.setText("");
+            curtask=0;
+            lblCT.setText("N/A");
+            return;
+        }
+        else if(curtask>1)
+        {
+            t = li.previous();
+            curtask--;
+            lblCT.setText(""+curtask);
+        }
+        else
+        {
+            li.next();
+            t = li.previous();
+        }
+        txtname.setText(t.getName());
+        txtdesc.setText(t.getDesc());
     }//GEN-LAST:event_menuremoveActionPerformed
 
     private void menushowallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menushowallActionPerformed
-        // Add popup message saying all current tasks
+        String result = "";
+        for (int i = 0; i < list.size; i++) {
+            t = (Task)list.get(i);
+            result += "Task "+(i+1)+": /n"+t.toString()+"/n";
+        }
+        JOptionPane.showMessageDialog(this,result);
     }//GEN-LAST:event_menushowallActionPerformed
 
     private void menuafterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuafterActionPerformed
