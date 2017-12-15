@@ -1,17 +1,19 @@
 
+import java.util.ArrayList;
+import java.util.ListIterator;
 import javax.swing.JOptionPane;
 
 
 public class TaskManager extends javax.swing.JFrame {
 
-    ArrayList list;
+    ArrayList<Task> list;
     ListIterator li;
     int curtask, tottask;
-    task t;
+    Task t;
     
     public TaskManager() {
         initComponents();
-        list = new ArrayList();
+        list = new ArrayList<Task>();
         li = list.listIterator();
         curtask = 0;
         tottask = 0;
@@ -57,6 +59,11 @@ public class TaskManager extends javax.swing.JFrame {
         btnfirst.setText("|<");
 
         btnprev.setText("<");
+        btnprev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnprevActionPerformed(evt);
+            }
+        });
 
         btnnext.setText(">");
         btnnext.addActionListener(new java.awt.event.ActionListener() {
@@ -192,6 +199,11 @@ public class TaskManager extends javax.swing.JFrame {
         jMenu3.setText("Insert");
 
         menubefore.setText("Before Current Task");
+        menubefore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menubeforeActionPerformed(evt);
+            }
+        });
         jMenu3.add(menubefore);
 
         menuafter.setText("After Current Task");
@@ -238,8 +250,8 @@ public class TaskManager extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,7 +266,7 @@ public class TaskManager extends javax.swing.JFrame {
         li.next();
         li.remove();
         tottask--;
-        lbltottask.setText(""+tottask);
+        lblTT.setText(""+tottask);
         if(tottask==0)
         {
             txtname.setText("");
@@ -265,24 +277,24 @@ public class TaskManager extends javax.swing.JFrame {
         }
         else if(curtask>1)
         {
-            t = li.previous();
+            t = (Task)li.previous();
             curtask--;
             lblCT.setText(""+curtask);
         }
         else
         {
             li.next();
-            t = li.previous();
+            t =(Task)li.previous();
         }
         txtname.setText(t.getName());
-        txtdesc.setText(t.getDesc());
+        txtdesc.setText(t.getDescription());
     }//GEN-LAST:event_menuremoveActionPerformed
 
     private void menushowallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menushowallActionPerformed
         String result = "";
-        for (int i = 0; i < list.size; i++) {
+        for (int i = 0; i < list.size(); i++) {
             t = (Task)list.get(i);
-            result += "Task "+(i+1)+": /n"+t.toString()+"/n";
+            result += "Task "+(i+1)+": \n"+t.toString()+"\n";
         }
         JOptionPane.showMessageDialog(this,result);
     }//GEN-LAST:event_menushowallActionPerformed
@@ -299,7 +311,7 @@ public class TaskManager extends javax.swing.JFrame {
         if(tottask > 0) li.next();
         
         li.add(t);
-        li.previos();
+        li.previous();
         curtask++;
         tottask++;
         lblTT.setText(""+tottask);
@@ -347,6 +359,38 @@ public class TaskManager extends javax.swing.JFrame {
         li.previous();
     }//GEN-LAST:event_menureplaceActionPerformed
 
+    private void menubeforeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menubeforeActionPerformed
+         String nm = txtname.getText();
+        String d = txtdesc.getText();
+        Task t = new Task(nm, d);
+        if(t.validate()==false)
+        {
+            JOptionPane.showMessageDialog(this,"Error - Must Enter All Information");
+            return;
+        }
+        if(tottask > 0) li.previous();
+        
+        li.add(t);
+        li.previous();
+        //curtask++;
+        tottask++;
+        lblTT.setText(""+tottask);
+        lblCT.setText(""+curtask);
+        JOptionPane.showMessageDialog(this,"Task Added");
+        
+    }//GEN-LAST:event_menubeforeActionPerformed
+
+    private void btnprevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnprevActionPerformed
+        if(curtask==0) return;
+        curtask--;
+        lblCT.setText(""+curtask);
+        li.previous();
+       // li.next();
+        t = (Task)li.previous();
+        txtname.setText(t.getName());
+        txtdesc.setText(t.getDescription());
+    }//GEN-LAST:event_btnprevActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -379,18 +423,6 @@ public class TaskManager extends javax.swing.JFrame {
         });
     }
     
-    public boolean validate()
-    {
-        if(name == null || description == null || name.equals("") || description.equals(""))
-            return false;
-        else 
-            return true;
-    }
-    
-    public String toString()
-    {
-        return "Name: "+name+"\nDescription: "+description+"\n~~~~~~~~~~~~\n";
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnfirst;
